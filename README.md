@@ -1,0 +1,2 @@
+# Panoramic
+Realtime panorama stitching
