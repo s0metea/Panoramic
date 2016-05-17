@@ -7,9 +7,7 @@ set(SOURCE_FILES main.cpp
 		DescriptorsManager.cpp
 		DescriptorsManager.h
 		PanoramaMaker.cpp
-		PanoramaMaker.h
-		part1.jpg
-		part2.jpg)
+		PanoramaMaker.h)
 find_package( OpenCV REQUIRED )
 add_executable(Panoramic ${SOURCE_FILES})
 
