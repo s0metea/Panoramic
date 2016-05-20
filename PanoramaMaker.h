@@ -29,6 +29,9 @@ private:
 	int frameWidth;
 	int frameHeight;
 	bool try_use_gpu; //Currently unavailable!
+	volatile int keyPressed;
+	void exitHandler(int arg);
+	void rebuildHandler(int arg);
 	void redrawMatches();
 };
 

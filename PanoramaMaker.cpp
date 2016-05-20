@@ -1,3 +1,5 @@
+#include <signal.h>
+#include <ncurses.h>
 #include "PanoramaMaker.h"
 
 PanoramaMaker::PanoramaMaker(vector<int> camerasID, int frameWidth, int frameHeight)
@@ -47,7 +49,7 @@ void PanoramaMaker::getFrames() {
 
 void PanoramaMaker::displayCurrentFrames() {
 	for(int j = 0; j < framesFromCameras.size(); j++) {
-		imshow(to_string(j), framesFromCameras[j]);
+		imwrite(to_string(j).append(".bmp"), framesFromCameras[j]);
 	}
 }
 
@@ -74,26 +76,39 @@ void PanoramaMaker::redrawMatches() {
 	drawMatches(framesFromCameras[0], descriptorsManager.getFirstImageKeypoints(), framesFromCameras[1], descriptorsManager.getSecondImageKeypoints(),
 				descriptorsManager.getBestMatches(), img_matches, Scalar::all(-1), Scalar::all(-1),
 				vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
-	imshow("Matches", img_matches);
+	imwrite("matches.bmp", img_matches);
+}
+
+void PanoramaMaker::exitHandler(int arg)
+{
+	(arg);
+	keyPressed = 0;
+}
+
+void PanoramaMaker::rebuildHandler(int arg)
+{
+	(arg);
+	keyPressed = 0;
 }
 
 
 void PanoramaMaker::start() {
 
-	int keyPressed = 0;
+	volatile int keyPressed = 1;
 	int framesCount = 0;
 	int64 start, end;
 
 	this->getFrames();
 	this->rebuildHomography();
 	this->redrawMatches();
-	keyPressed = 0;
-
 	Mat warped;
-	//Esc pressed
+	signal(SIGINT, exitHandler);
 	start = getTickCount();
-	while (keyPressed % 256 != 27) {
-		if(keyPressed % 256 == 32) {
+
+	while (keyPressed) {
+
+		int c = getch();   //capture the key code and insert into c
+		if(c == 'r') {
 			this->rebuildHomography();
 			this->redrawMatches();
 		}
@@ -107,12 +122,7 @@ void PanoramaMaker::start() {
 		warpPerspective(framesFromCameras[1], warped, homography[0], cv::Size(framesFromCameras[1].cols * 2, framesFromCameras[1].rows));
 		cv::Mat half(warped,cv::Rect(0, 0, framesFromCameras[0].cols, framesFromCameras[0].rows));
 		framesFromCameras[0].copyTo(half);
-		imshow("Result", warped);
-
-		framesCount++;
-
-		keyPressed = cv::waitKey(5);
-
+		imwrite("result.bmp", warped);
 	}
 
 	end = getTickCount();
