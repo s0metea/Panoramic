@@ -78,18 +78,6 @@ void PanoramaMaker::redrawMatches() {
 	imwrite("matches.bmp", img_matches);
 }
 
-void PanoramaMaker::exitHandler(int arg)
-{
-	(arg);
-	keyPressed = 0;
-}
-
-void PanoramaMaker::rebuildHandler(int arg)
-{
-	(arg);
-	keyPressed = 0;
-}
-
 
 void PanoramaMaker::start() {
 
