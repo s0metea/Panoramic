@@ -1,5 +1,4 @@
 #include <signal.h>
-#include <ncurses.h>
 #include "PanoramaMaker.h"
 
 PanoramaMaker::PanoramaMaker(vector<int> camerasID, int frameWidth, int frameHeight)
@@ -104,10 +103,9 @@ void PanoramaMaker::start() {
 	Mat warped;
 	signal(SIGINT, exitHandler);
 	start = getTickCount();
-
-	while (keyPressed) {
-
-		int c = getch();   //capture the key code and insert into c
+	int c = 0;
+	while (c != 'q') {
+		c = getchar();   //capture the key code and insert into c
 		if(c == 'r') {
 			this->rebuildHomography();
 			this->redrawMatches();
