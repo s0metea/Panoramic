@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 	cout << "Ok, first camera will be initialize with id " << firstCamera << "." << endl;
 	cout << "Now you need to tell me id of the second camera:" << endl;
 	cin >> secondCamera;
-	cout << "Ok, second camera will be initialize with id " << firstCamera << "." << endl;
+	cout << "Ok, second camera will be initialize with id " << secondCamera << "." << endl;
 	vector<int> camerasID;
 	camerasID.push_back(firstCamera);
 	camerasID.push_back(secondCamera);
