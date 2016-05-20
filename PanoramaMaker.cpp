@@ -51,7 +51,7 @@ void PanoramaMaker::getFrames() {
 void PanoramaMaker::displayCurrentFrames() {
 	for(int j = 0; j < framesFromCameras.size(); j++) {
 		string file(path);
-		imwrite(file.append(to_string(j).append(".bmp")), framesFromCameras[j]);
+		imwrite(file.append(to_string(j).append(".jpg")), framesFromCameras[j]);
 		file.clear();
 	}
 }
@@ -80,7 +80,7 @@ void PanoramaMaker::redrawMatches() {
 				descriptorsManager.getBestMatches(), img_matches, Scalar::all(-1), Scalar::all(-1),
 				vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
 	string file(path);
-	imwrite(file.append("matches.bmp"), img_matches);
+	imwrite(file.append("matches.jpg"), img_matches);
 }
 
 
@@ -112,7 +112,7 @@ void PanoramaMaker::start() {
 		cv::Mat half(warped,cv::Rect(0, 0, framesFromCameras[0].cols, framesFromCameras[0].rows));
 		framesFromCameras[0].copyTo(half);
 		string file(path);
-		imwrite(file.append("result.bmp"), warped);
+		imwrite(file.append("result.jpg"), warped);
 	}
 	end = getTickCount();
 	stop();
