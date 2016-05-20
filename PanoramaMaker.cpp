@@ -1,4 +1,3 @@
-#include <curses.h>
 #include "PanoramaMaker.h"
 
 string path = "/var/www/";
