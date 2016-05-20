@@ -20,6 +20,7 @@ public:
 	void getFrames();
 	void displayCurrentFrames();
 	void rebuildHomography();
+	int c;
 private:
 	vector<VideoCapture> cameras;
 	vector<Mat> framesFromCameras;

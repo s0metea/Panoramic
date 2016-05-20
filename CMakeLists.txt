@@ -10,5 +10,5 @@ set(SOURCE_FILES main.cpp
 		PanoramaMaker.h)
 find_package( OpenCV REQUIRED )
 add_executable(Panoramic ${SOURCE_FILES})
+target_link_libraries(Panoramic ${OpenCV_LIBS} -pthread)
 
-target_link_libraries(Panoramic ${OpenCV_LIBS})

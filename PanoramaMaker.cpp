@@ -1,6 +1,5 @@
-#include <signal.h>
+#include <curses.h>
 #include "PanoramaMaker.h"
-
 
 string path = "/var/www/";
 
@@ -88,7 +87,6 @@ void PanoramaMaker::redrawMatches() {
 
 void PanoramaMaker::start() {
 
-	volatile int keyPressed = 1;
 	int framesCount = 0;
 	int64 start, end;
 
@@ -98,9 +96,8 @@ void PanoramaMaker::start() {
 	Mat warped;
 
 	start = getTickCount();
-	int c = 0;
+	c = 0;
 	while (c != 'q') {
-		c = getchar();   //capture the key code and insert into c
 		if(c == 'r') {
 			this->rebuildHomography();
 			this->redrawMatches();
@@ -118,7 +115,6 @@ void PanoramaMaker::start() {
 		string file(path);
 		imwrite(file.append("result.bmp"), warped);
 	}
-
 	end = getTickCount();
 	stop();
 	cout << "FPS: " << framesCount / ((end - start) / getTickFrequency()) << endl;
