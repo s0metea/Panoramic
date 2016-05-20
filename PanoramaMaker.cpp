@@ -89,7 +89,7 @@ void PanoramaMaker::start() {
 	this->rebuildHomography();
 	this->redrawMatches();
 	Mat warped;
-	signal(SIGINT, exitHandler);
+
 	start = getTickCount();
 	int c = 0;
 	while (c != 'q') {
