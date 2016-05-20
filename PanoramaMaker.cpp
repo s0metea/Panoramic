@@ -29,7 +29,7 @@ void PanoramaMaker::releaseCameras() {
 }
 
 void PanoramaMaker::stop() {
-	destroyAllWindows();
+	//destroyAllWindows();
 	this->releaseCameras();
 }
 
