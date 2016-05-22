@@ -1,3 +1,4 @@
+#include <mongoose.h>
 #include "PanoramaMaker.h"
 string path = "/var/www/";
 
@@ -83,7 +84,7 @@ void PanoramaMaker::redrawMatches() {
 }
 
 
-void PanoramaMaker::start() {
+void PanoramaMaker::start(mg_server *server, int *action) {
 
 	int framesCount = 0;
 	int64 start, end;
@@ -92,13 +93,13 @@ void PanoramaMaker::start() {
 	this->rebuildHomography();
 	this->redrawMatches();
 	Mat warped;
-
+	*action = 1;
 	start = getTickCount();
-	c = 0;
-	while (c != 'q') {
-		if(c == 'r') {
+	while (*action != '5') {
+		if(*action == '6') {
 			this->rebuildHomography();
 			this->redrawMatches();
+			cout << "Rebuilded!";
 		}
 
 		this->getFrames();
@@ -112,8 +113,11 @@ void PanoramaMaker::start() {
 		framesFromCameras[0].copyTo(half);
 		string file(path);
 		imwrite(file.append("result.jpg"), warped);
+		framesCount++;
+		mg_poll_server(server, 10);
 	}
 	end = getTickCount();
+	mg_destroy_server(&server);
 	stop();
 	cout << "FPS: " << framesCount / ((end - start) / getTickFrequency()) << endl;
 	cout << "Exit!";

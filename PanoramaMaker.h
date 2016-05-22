@@ -15,7 +15,7 @@ public:
 	void setCamerasResolution(int frameWidth, int frameHeight);
 	void getCameraInfo(int id);
 	void releaseCameras();
-	void start();
+	void start(mg_server *server, int *action);
 	void stop();
 	void getFrames();
 	void displayCurrentFrames();
