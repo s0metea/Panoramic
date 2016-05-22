@@ -1,16 +1,9 @@
 #include <iostream>
 #include <opencv2/core.hpp>
-#include <thread>
 #include "PanoramaMaker.h"
 
 using namespace cv;
 using namespace std;
-
-void keyCheck(int *c) {
-	while(true) {
-		*c = getchar();
-	}
-}
 
 int main(int argc, char** argv)
 {
@@ -33,7 +26,6 @@ int main(int argc, char** argv)
 	camerasID.push_back(firstCamera);
 	camerasID.push_back(secondCamera);
 	PanoramaMaker pm(camerasID, frameWidth, frameHeight);
-	thread s(keyCheck, &pm.c);
 	cout << "Ok, we can start just now. Enjoy your realtime panorama stitching!" << endl;
 	pm.start();
 }

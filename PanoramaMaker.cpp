@@ -1,5 +1,4 @@
 #include "PanoramaMaker.h"
-
 string path = "/var/www/";
 
 
