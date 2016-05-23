@@ -59,7 +59,7 @@ int main(void) {
     mg_add_uri_handler(server, "/", handler);
     printf("Starting web interface on port %s\n", mg_get_option(server, "listening_port"));
     printf("Starting image streaming...");
-    int status = system(streamCommand);
+    int status = system(streamCommand.data());
 
     int firstCamera, secondCamera;
     int frameWidth, frameHeight;
