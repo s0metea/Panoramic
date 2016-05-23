@@ -22,7 +22,7 @@ static const char *html_form =
                 "<img id=\"right_img\" src=\"img/1.jpg\" alt=\"Right part\">\n"
                 "<p><img id=\"center_img\" src=\"http://192.168.2.112:8080/?action=stream\" alt=\"Result of stitching\"></p>\n"
                 "<p><img id=\"matches_img\" src=\"img/matches.jpg\" alt=\"Matches between left and right part\"></p>\n"
-                "    <form action=\"http://192.168.2.112:8080/handle_post_request\" method=\"post\">\n"
+                "    <form action=\"http://192.168.2.112:80/handle_post_request\" method=\"post\">\n"
                 "        <button type=\"submit\" name=\"input\" value=\"1\">Start</button>\n"
                 "        <button type=\"submit\" name=\"input\" value=\"2\">Stop</button>\n"
                 "<br>"
@@ -60,7 +60,7 @@ void streamingStart() {
 
 int main(void) {
     struct mg_server *server = mg_create_server(NULL);
-    mg_set_option(server, "listening_port", "8080");
+    mg_set_option(server, "listening_port", "80");
     mg_add_uri_handler(server, "/", handler);
     printf("Starting web interface on port %s\n", mg_get_option(server, "listening_port"));
     printf("Starting image streaming...");
