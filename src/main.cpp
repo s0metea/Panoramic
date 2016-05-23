@@ -1,6 +1,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <thread>
 #include "mongoose.h"
 #include "../include/PanoramaMaker.h"
 
@@ -52,14 +53,18 @@ static int handler(struct mg_connection *conn) {
     return 1;
 }
 
-int main(void) {
+void streamingStart() {
     string streamCommand = "mjpg_streamer -i  \"./plugins/input_file.so -f /root/data/Panoramic/img -n result.jpg\" -o \"./plugins/output_http.so -w ./www\"";
+    int status = system(streamCommand.data());
+}
+
+int main(void) {
     struct mg_server *server = mg_create_server(NULL);
     mg_set_option(server, "listening_port", "8080");
     mg_add_uri_handler(server, "/", handler);
     printf("Starting web interface on port %s\n", mg_get_option(server, "listening_port"));
     printf("Starting image streaming...");
-    int status = system(streamCommand.data());
+    std::thread streaming(streamingStart);
 
     int firstCamera, secondCamera;
     int frameWidth, frameHeight;
