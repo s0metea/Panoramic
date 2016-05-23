@@ -47,8 +47,9 @@ void PanoramaMaker::getFrames() {
 }
 
 void PanoramaMaker::displayCurrentFrames() {
-	string path("img/");
+	
 	for(int j = 0; j < framesFromCameras.size(); j++) {
+		string path("img/");
 		imwrite(path.append(to_string(j).append(".jpg")), framesFromCameras[j]);
 	}
 }
