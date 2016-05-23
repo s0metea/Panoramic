@@ -47,8 +47,9 @@ void PanoramaMaker::getFrames() {
 }
 
 void PanoramaMaker::displayCurrentFrames() {
+	string path("img/");
 	for(int j = 0; j < framesFromCameras.size(); j++) {
-		imwrite((to_string(j).append(".jpg")), framesFromCameras[j]);
+		imwrite(path.append(to_string(j).append(".jpg")), framesFromCameras[j]);
 	}
 }
 
@@ -75,7 +76,7 @@ void PanoramaMaker::redrawMatches() {
 	drawMatches(framesFromCameras[0], descriptorsManager.getFirstImageKeypoints(), framesFromCameras[1], descriptorsManager.getSecondImageKeypoints(),
 				descriptorsManager.getBestMatches(), img_matches, Scalar::all(-1), Scalar::all(-1),
 				vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
-	imwrite("matches.jpg", img_matches);
+	imwrite("img/matches.jpg", img_matches);
 }
 
 
@@ -122,7 +123,7 @@ void PanoramaMaker::start(mg_server *server, int *action) {
 		warpPerspective(framesFromCameras[1], warped, homography[0], cv::Size(framesFromCameras[1].cols * 2, framesFromCameras[1].rows));
 		cv::Mat half(warped,cv::Rect(0, 0, framesFromCameras[0].cols, framesFromCameras[0].rows));
 		framesFromCameras[0].copyTo(half);
-		imwrite("result.jpg", warped);
+		imwrite("img/result.jpg", warped);
 		framesCount++;
 		mg_poll_server(server, 10);
 	}
