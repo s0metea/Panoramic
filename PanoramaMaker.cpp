@@ -1,7 +1,5 @@
 #include <mongoose.h>
 #include "PanoramaMaker.h"
-string path = "/var/www/";
-
 
 PanoramaMaker::PanoramaMaker(vector<int> camerasID, int frameWidth, int frameHeight)
 {
@@ -50,9 +48,7 @@ void PanoramaMaker::getFrames() {
 
 void PanoramaMaker::displayCurrentFrames() {
 	for(int j = 0; j < framesFromCameras.size(); j++) {
-		string file(path);
-		imwrite(file.append(to_string(j).append(".jpg")), framesFromCameras[j]);
-		file.clear();
+		imwrite((to_string(j).append(".jpg")), framesFromCameras[j]);
 	}
 }
 
@@ -79,8 +75,7 @@ void PanoramaMaker::redrawMatches() {
 	drawMatches(framesFromCameras[0], descriptorsManager.getFirstImageKeypoints(), framesFromCameras[1], descriptorsManager.getSecondImageKeypoints(),
 				descriptorsManager.getBestMatches(), img_matches, Scalar::all(-1), Scalar::all(-1),
 				vector<char>(), DrawMatchesFlags::NOT_DRAW_SINGLE_POINTS);
-	string file(path);
-	imwrite(file.append("matches.jpg"), img_matches);
+	imwrite("matches.jpg", img_matches);
 }
 
 
@@ -93,15 +88,31 @@ void PanoramaMaker::start(mg_server *server, int *action) {
 	this->rebuildHomography();
 	this->redrawMatches();
 	Mat warped;
-	*action = 1;
+	*action = 0;
 	start = getTickCount();
-	while (*action != '5') {
-		if(*action == '6') {
-			this->rebuildHomography();
-			this->redrawMatches();
-			cout << "Rebuilded!";
-		}
-
+	while (true) {
+        switch (*action) {
+            case 50:
+                end = getTickCount();
+                stop();
+                cout << "FPS: " << framesCount / ((end - start) / getTickFrequency()) << endl;
+                while(*action != 1) {
+                    mg_poll_server(server, 100);
+                }
+                *action = 0;
+                break;
+            case 51:
+                this->rebuildHomography();
+                this->redrawMatches();
+                cout << "Rebuilded!";
+                *action = 0;
+                break;
+            case 52:
+                stop();
+                mg_destroy_server(&server);
+                return;
+            default:break;
+        }
 		this->getFrames();
 		this->displayCurrentFrames();
 
@@ -111,14 +122,9 @@ void PanoramaMaker::start(mg_server *server, int *action) {
 		warpPerspective(framesFromCameras[1], warped, homography[0], cv::Size(framesFromCameras[1].cols * 2, framesFromCameras[1].rows));
 		cv::Mat half(warped,cv::Rect(0, 0, framesFromCameras[0].cols, framesFromCameras[0].rows));
 		framesFromCameras[0].copyTo(half);
-		string file(path);
-		imwrite(file.append("result.jpg"), warped);
+		imwrite("result.jpg", warped);
 		framesCount++;
 		mg_poll_server(server, 10);
 	}
-	end = getTickCount();
-	mg_destroy_server(&server);
-	stop();
-	cout << "FPS: " << framesCount / ((end - start) / getTickFrequency()) << endl;
-	cout << "Exit!";
+
 }

@@ -7,36 +7,59 @@
 int value = 0;
 int *action = &value;
 static const char *html_form =
-        "<html><body>POST example."
-                "<form method=\"POST\" action=\"/handle_post_request\">"
-                "Input 1: <input type=\"text\" name=\"input_1\" /> <br/>"
-                "Input 2: <input type=\"text\" name=\"input_2\" /> <br/>"
-                "<input type=\"submit\" />"
-                "</form></body></html>";
+        "<!DOCTYPE HTML>\n"
+                "\n"
+                "<html>\n"
+                "\n"
+                "<head>\n"
+                "    <meta charset=\"UTF-8\" Cache-Control=\"no-cache\">\n"
+                "    <title>Panoramic — Realtime panorama stitching</title>\n"
+                "<body>\n"
+                "\n"
+                "<div style=\"text-align: center;\">\n"
+                "<img id=\"left_img\" src=\"0.jpg\" alt=\"Left part\">\n"
+                "<img id=\"right_img\" src=\"1.jpg\" alt=\"Right part\">\n"
+                "<p><img id=\"center_img\" src=\"http://192.168.2.112:8080/?action=stream\" alt=\"Result of stitching\"></p>\n"
+                "<p><img id=\"matches_img\" src=\"matches.jpg\" alt=\"Matches between left and right part\"></p>\n"
+                "    <form action=\"http://127.0.0.1:8080/handle_post_request\" method=\"post\">\n"
+                "        <button type=\"submit\" name=\"input\" value=\"1\">Start</button>\n"
+                "        <button type=\"submit\" name=\"input\" value=\"2\">Stop</button>\n"
+                "<br>"
+                "        <button type=\"submit\" name=\"input\" value=\"3\">Rebuild homography</button>\n"
+                "<br>"
+                "        <button type=\"submit\" name=\"input\" value=\"4\">Shutdown server</button>\n"
+                "    </form>\n"
+                "\n"
+                "<footer>\n"
+                "    <p>sometea1@gmail.com</p>\n"
+                "    <p>2016</p>\n"
+                "</footer>\n"
+                "\n"
+                "</div>\n"
+                "</body>\n"
+                "\n"
+                "</html> ";
 
 static int handler(struct mg_connection *conn) {
     char var1[500];
 
     if (strcmp(conn->uri, "/handle_post_request") == 0) {
-        // User has submitted a form, show submitted data and a variable value
-        // Parse form data. var1 and var2 are guaranteed to be NUL-terminated
-        mg_get_var(conn, "input_1", var1, sizeof(var1));
+        mg_get_var(conn, "input", var1, sizeof(var1));
         *action = (int) *var1;
-
-    } else {
-        // Show HTML form.
-        mg_send_data(conn, html_form, strlen(html_form));
     }
+    mg_send_data(conn, html_form, strlen(html_form));
 
     return 1;
 }
 
 int main(void) {
-
+    string streamCommand = "root/data/mjpg/mjpg-streamer/mjpg-streamer-experimental/mjpg_streamer -i  \"./plugins/input_file/input_file.so -f /root/data/Panoramic -n result.jpg\" -o \"./plugins/output_http/output_http.so -w ./www\"";
     struct mg_server *server = mg_create_server(NULL);
     mg_set_option(server, "listening_port", "8080");
     mg_add_uri_handler(server, "/", handler);
     printf("Starting web interface on port %s\n", mg_get_option(server, "listening_port"));
+    printf("Starting image streaming...");
+    int status = system(streamCommand);
 
     int firstCamera, secondCamera;
     int frameWidth, frameHeight;
