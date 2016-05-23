@@ -54,7 +54,7 @@ static int handler(struct mg_connection *conn) {
 }
 
 void streamingStart() {
-    string streamCommand = "mjpg_streamer -i  \"./plugins/input_file.so -f /root/data/Panoramic/img -n result.jpg\" -o \"./plugins/output_http.so -w ./www\"";
+    string streamCommand = "mjpg_streamer -i  \"/root/data/Panoramic/plugins/input_file.so -f /root/data/Panoramic/img -n result.jpg\" -o \"/root/data/Panoramic//plugins/output_http.so -w ./www\"";
     int status = system(streamCommand.data());
 }
 
