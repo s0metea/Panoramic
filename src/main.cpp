@@ -22,7 +22,7 @@ static const char *html_form =
                 "<img id=\"right_img\" src=\"1.jpg\" alt=\"Right part\">\n"
                 "<p><img id=\"center_img\" src=\"http://192.168.2.112:8080/?action=stream\" alt=\"Result of stitching\"></p>\n"
                 "<p><img id=\"matches_img\" src=\"matches.jpg\" alt=\"Matches between left and right part\"></p>\n"
-                "    <form action=\"http://127.0.0.1:8080/handle_post_request\" method=\"post\">\n"
+                "    <form action=\"http://192.168.2.112:8080/handle_post_request\" method=\"post\">\n"
                 "        <button type=\"submit\" name=\"input\" value=\"1\">Start</button>\n"
                 "        <button type=\"submit\" name=\"input\" value=\"2\">Stop</button>\n"
                 "<br>"
@@ -54,7 +54,7 @@ static int handler(struct mg_connection *conn) {
 }
 
 void streamingStart() {
-    string streamCommand = "mjpg_streamer -i  \"/root/data/Panoramic/plugins/input_file.so -f /root/data/Panoramic/img -n result.jpg\" -o \"/root/data/Panoramic//plugins/output_http.so -w ./www\"";
+    string streamCommand = "mjpg_streamer -i  \"/root/data/Panoramic/plugins/input_file.so -f /root/data/Panoramic/img -n result.jpg\" -o \"/root/data/Panoramic/plugins/output_http.so -w ./www\"";
     int status = system(streamCommand.data());
 }
 
