@@ -53,7 +53,7 @@ static int handler(struct mg_connection *conn) {
 }
 
 int main(void) {
-    string streamCommand = "mjpg_streamer -i  \"./input_file.so -f /root/data/Panoramic -n result.jpg\" -o \"./output_http.so -w ./www\"";
+    string streamCommand = "mjpg_streamer -i  \"./plugins/input_file.so -f /root/data/Panoramic/img -n result.jpg\" -o \"./plugins/output_http.so -w ./www\"";
     struct mg_server *server = mg_create_server(NULL);
     mg_set_option(server, "listening_port", "8080");
     mg_add_uri_handler(server, "/", handler);
