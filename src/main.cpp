@@ -22,7 +22,7 @@ static const char *html_form =
                 "<img id=\"right_img\" src=\"img/1.jpg\" alt=\"Right part\">\n"
                 "<p><img id=\"center_img\" src=\"http://192.168.2.112:8080/?action=stream\" alt=\"Result of stitching\"></p>\n"
                 "<p><img id=\"matches_img\" src=\"img/matches.jpg\" alt=\"Matches between left and right part\"></p>\n"
-                "    <form action=\"http://192.168.2.112:8080/handle_post_request\" method=\"post\">\n"
+                "    <form action=\"http://192.168.2.112:9090/request\" method=\"post\">\n"
                 "        <button type=\"submit\" name=\"input\" value=\"1\">Start</button>\n"
                 "        <button type=\"submit\" name=\"input\" value=\"2\">Stop</button>\n"
                 "<br>"
@@ -44,7 +44,7 @@ static const char *html_form =
 static int handler(struct mg_connection *conn) {
     char var1[500];
 
-    if (strcmp(conn->uri, "/handle_post_request") == 0) {
+    if (strcmp(conn->uri, "/request") == 0) {
         mg_get_var(conn, "input", var1, sizeof(var1));
         *action = (int) *var1;
     }
@@ -53,18 +53,11 @@ static int handler(struct mg_connection *conn) {
     return 1;
 }
 
-void streamingStart() {
-    string streamCommand = "mjpg_streamer -i  \"/root/data/Panoramic/plugins/input_file.so -f /root/data/Panoramic/img -n result.jpg\" -o \"/root/data/Panoramic/plugins/output_http.so -w ./www\"";
-    int status = system(streamCommand.data());
-}
-
 int main(void) {
     struct mg_server *server = mg_create_server(NULL);
-    mg_set_option(server, "listening_port", "8080");
+    mg_set_option(server, "listening_port", "9090");
     mg_add_uri_handler(server, "/", handler);
     printf("Starting web interface on port %s\n", mg_get_option(server, "listening_port"));
-    printf("Starting image streaming...");
-    std::thread streaming(streamingStart);
 
     int firstCamera, secondCamera;
     int frameWidth, frameHeight;
