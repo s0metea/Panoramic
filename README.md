@@ -13,3 +13,4 @@ Running:
  - output_http.so
 2) `cmake .`
 3) `make -j 2`
+4) For streaming type: `mjpg_streamer -i  "/root/data/Panoramic/plugins/input_file.so -f /root/data/Panoramic/img -n result.jpg" -o "/root/data/Panoramic/plugins/output_http.so -w ./www"`

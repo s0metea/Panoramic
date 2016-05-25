@@ -41,7 +41,11 @@ void PanoramaMaker::getCameraInfo(int id) {
 
 void PanoramaMaker::getFrames() {
 	for (int i = 0; i < this->camerasAmount; i++) {
-		cameras[i] >> framesFromCameras[i];
+		while(!cameras[i].grab())
+		{
+			cout << "Can not grab images from camera " << i << "!" << endl;
+		}
+		cameras[i].retrieve(framesFromCameras[i], 0);
 	}
 
 }
@@ -85,6 +89,8 @@ void PanoramaMaker::start(mg_server *server, int *action) {
 
 	int framesCount = 0;
 	int64 start, end;
+
+	this->getFrames();//First frames are black
 
 	this->getFrames();
 	this->rebuildHomography();
