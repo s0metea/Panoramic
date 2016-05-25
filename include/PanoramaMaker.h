@@ -32,5 +32,7 @@ private:
 	bool try_use_gpu; //Currently unavailable!
 	volatile int keyPressed;
 	void redrawMatches();
+
+	void camInitialize();
 };
 
