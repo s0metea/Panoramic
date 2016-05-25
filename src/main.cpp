@@ -7,6 +7,7 @@
 
 int value = 0;
 int *action = &value;
+string ip;
 static const char *html_form =
         "<!DOCTYPE HTML>\n"
                 "\n"
@@ -20,9 +21,9 @@ static const char *html_form =
                 "<div style=\"text-align: center;\">\n"
                 "<img id=\"left_img\" src=\"img/0.jpg\" alt=\"Left part\">\n"
                 "<img id=\"right_img\" src=\"img/1.jpg\" alt=\"Right part\">\n"
-                "<p><img id=\"center_img\" src=\"http://192.168.2.112:8080/?action=stream\" alt=\"Result of stitching\"></p>\n"
+                "<p><img id=\"center_img\" src=\"http://127.0.0.1:8080/?action=stream\" alt=\"Result of stitching\"></p>\n"
                 "<p><img id=\"matches_img\" src=\"img/matches.jpg\" alt=\"Matches between left and right part\"></p>\n"
-                "    <form action=\"http://192.168.2.112:9090/request\" method=\"post\">\n"
+                "    <form action=\"http://127.0.0.1:9090/request\" method=\"post\">\n"
                 "        <button type=\"submit\" name=\"input\" value=\"1\">Start</button>\n"
                 "        <button type=\"submit\" name=\"input\" value=\"2\">Stop</button>\n"
                 "<br>"
@@ -41,6 +42,14 @@ static const char *html_form =
                 "\n"
                 "</html> ";
 
+bool replace(std::string& str, const std::string& from, const std::string& to) {
+    size_t start_pos = str.find(from);
+    if(start_pos == std::string::npos)
+        return false;
+    str.replace(start_pos, from.length(), to);
+    return true;
+}
+
 static int handler(struct mg_connection *conn) {
     char var1[500];
 
@@ -55,6 +64,13 @@ static int handler(struct mg_connection *conn) {
 
 int main(void) {
     struct mg_server *server = mg_create_server(NULL);
+    string html(html_form);
+    cout << "Enter ip of the server:" << endl;
+    cin >> ip;
+    replace(html, "127.0.0.1", ip);
+    replace(html, "127.0.0.1", ip);
+    html_form = html.data();
+    cout << html_form;
     mg_set_option(server, "listening_port", "9090");
     mg_add_uri_handler(server, "/", handler);
     printf("Starting web interface on port %s\n", mg_get_option(server, "listening_port"));

@@ -15,6 +15,14 @@ PanoramaMaker::PanoramaMaker(vector<int> camerasID, int frameWidth, int frameHei
 	setCamerasResolution(this->frameWidth, this->frameHeight);
 }
 
+void PanoramaMaker::camInitialize() {
+	for(int i = 0; i < this->camerasAmount; i++) {
+		for(int j = 0; j < 5; j++) {
+			cameras[i].read(framesFromCameras[i]);
+		}
+	}
+}
+
 void PanoramaMaker::setCamerasResolution(int frameWidth, int frameHeight) {
 	for (int i = 0; i < this->camerasAmount; i++) {
 		cameras[i].set(CV_CAP_PROP_FRAME_WIDTH, frameWidth);
@@ -41,7 +49,7 @@ void PanoramaMaker::getCameraInfo(int id) {
 
 void PanoramaMaker::getFrames() {
 	for (int i = 0; i < this->camerasAmount; i++) {
-		while(!cameras[i].grab())
+		if(!cameras[i].grab())
 		{
 			cout << "Can not grab images from camera " << i << "!" << endl;
 		}
@@ -90,7 +98,7 @@ void PanoramaMaker::start(mg_server *server, int *action) {
 	int framesCount = 0;
 	int64 start, end;
 
-	this->getFrames();//First frames are black
+	this->camInitialize();
 
 	this->getFrames();
 	this->rebuildHomography();
@@ -112,7 +120,7 @@ void PanoramaMaker::start(mg_server *server, int *action) {
             case 51:
                 this->rebuildHomography();
                 this->redrawMatches();
-                cout << "Rebuilded!";
+                cout << "Rebuilded!" << endl;
                 *action = 0;
                 break;
             case 52:
