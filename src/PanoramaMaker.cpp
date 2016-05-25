@@ -10,6 +10,7 @@ PanoramaMaker::PanoramaMaker(vector<int> camerasID, int frameWidth, int frameHei
 	this->homography.reserve(camerasAmount - 1);
 	for (int i = 0; i < camerasAmount; i++) {
 		cameras.push_back(VideoCapture(camerasID[i]));
+		cameras[i].set(CV_CAP_PROP_FOURCC ,CV_FOURCC('M', 'J', 'P', 'G') );
 		framesFromCameras.push_back(Mat());
 	}
 	setCamerasResolution(this->frameWidth, this->frameHeight);
@@ -106,6 +107,7 @@ void PanoramaMaker::start(mg_server *server, int *action) {
 	Mat warped;
 	*action = 0;
 	start = getTickCount();
+	int i = 0;
 	while (true) {
         switch (*action) {
             case 50:
@@ -138,9 +140,13 @@ void PanoramaMaker::start(mg_server *server, int *action) {
 		warpPerspective(framesFromCameras[1], warped, homography[0], cv::Size(framesFromCameras[1].cols * 2, framesFromCameras[1].rows));
 		cv::Mat half(warped,cv::Rect(0, 0, framesFromCameras[0].cols, framesFromCameras[0].rows));
 		framesFromCameras[0].copyTo(half);
-		imwrite("img/result.jpg", warped);
+		string imgNum("img/result");
+		imgNum.append(to_string(i)).append(".jpg");
+		imwrite(imgNum, warped);
+		imgNum.clear();
 		framesCount++;
-		mg_poll_server(server, 10);
+		i++;
+		mg_poll_server(server, 100);
 	}
 
 }
