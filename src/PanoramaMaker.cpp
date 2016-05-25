@@ -10,7 +10,6 @@ PanoramaMaker::PanoramaMaker(vector<int> camerasID, int frameWidth, int frameHei
 	this->homography.reserve(camerasAmount - 1);
 	for (int i = 0; i < camerasAmount; i++) {
 		cameras.push_back(VideoCapture(camerasID[i]));
-		cameras[i].set(CV_CAP_PROP_FOURCC ,CV_FOURCC('M', 'J', 'P', 'G') );
 		framesFromCameras.push_back(Mat());
 	}
 	setCamerasResolution(this->frameWidth, this->frameHeight);
