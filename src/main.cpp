@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <thread>
+
 #include "mongoose.h"
 #include "../include/PanoramaMaker.h"
 
@@ -19,15 +19,11 @@ static const char *html_form =
                 "<body>\n"
                 "\n"
                 "<div style=\"text-align: center;\">\n"
-                "<img id=\"left_img\" src=\"img/0.jpg\" alt=\"Left part\">\n"
-                "<img id=\"right_img\" src=\"img/1.jpg\" alt=\"Right part\">\n"
                 "<p><img id=\"center_img\" src=\"http://127.0.0.1:8080/?action=stream\" alt=\"Result of stitching\"></p>\n"
-                "<p><img id=\"matches_img\" src=\"img/matches.jpg\" alt=\"Matches between left and right part\"></p>\n"
                 "    <form action=\"http://127.0.0.1:9090/request\" method=\"post\">\n"
-                "        <button type=\"submit\" name=\"input\" value=\"1\">Start</button>\n"
-                "        <button type=\"submit\" name=\"input\" value=\"2\">Stop</button>\n"
                 "<br>"
                 "        <button type=\"submit\" name=\"input\" value=\"3\">Rebuild homography</button>\n"
+                "        <button type=\"submit\" name=\"input\" value=\"5\">Show FPS</button>\n"
                 "<br>"
                 "        <button type=\"submit\" name=\"input\" value=\"4\">Shutdown server</button>\n"
                 "    </form>\n"
@@ -56,8 +52,9 @@ static int handler(struct mg_connection *conn) {
     if (strcmp(conn->uri, "/request") == 0) {
         mg_get_var(conn, "input", var1, sizeof(var1));
         *action = (int) *var1;
+        cout << "Request with id: " << *action << endl;
     }
-    mg_send_data(conn, html_form, strlen(html_form));
+    mg_send_data(conn, html_form, (int) strlen(html_form));
 
     return 1;
 }
@@ -67,6 +64,14 @@ int main(void) {
     string html(html_form);
     cout << "Enter ip of the server:" << endl;
     cin >> ip;
+    //Fast set for debug
+    if(ip == "0")
+    {
+        ip = "127.0.0.1";
+    }
+    if(ip == "1") {
+        ip = "192.168.2.112";
+    }
     replace(html, "127.0.0.1", ip);
     replace(html, "127.0.0.1", ip);
     html_form = html.data();
