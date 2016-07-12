@@ -7,8 +7,7 @@ set(SOURCE_FILES src/main.cpp
 		src/DescriptorsManager.cpp
 		include/DescriptorsManager.h
 		src/PanoramaMaker.cpp
-		include/PanoramaMaker.h src/main.cpp
-		)
+		include/PanoramaMaker.h src/main.cpp)
 find_package( OpenCV REQUIRED )
 add_executable(Panoramic ${SOURCE_FILES})
 target_link_libraries(Panoramic ${OpenCV_LIBS} -lmongoose -lpthread)

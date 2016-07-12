@@ -2,7 +2,7 @@
 #include <iostream>
 #include <opencv2/videoio.hpp>
 #include "DescriptorsManager.h"
-
+#include "mongoose.h"
 
 
 using namespace std;
@@ -29,6 +29,7 @@ private:
 	int camerasAmount;
 	int frameWidth;
 	int frameHeight;
+	vector<int> camerasID;
 	bool try_use_gpu; //Currently unavailable!
 	volatile int keyPressed;
 	void redrawMatches();
