@@ -8,8 +8,11 @@ set(SOURCE_FILES src/main.cpp
 		include/DescriptorsManager.h
 		src/PanoramaMaker.cpp
 		include/PanoramaMaker.h src/main.cpp
-		)
+        include/json/json.h config.json include/json/json-forwards.h
+        src/json/jsoncpp.cpp
+        src/mongoose.c include/mongoose.h
+        )
 find_package( OpenCV REQUIRED )
 add_executable(Panoramic ${SOURCE_FILES})
-target_link_libraries(Panoramic ${OpenCV_LIBS} -lmongoose -lpthread)
+target_link_libraries(Panoramic ${OpenCV_LIBS})
 
