@@ -13,9 +13,9 @@ static const char *html_form =
                 "<body>\n"
                 "\n"
                 "   <div style=\"text-align: center;\">\n"
-                "       <p><img style=\"width:85%\"id=\"center_img\" src=\"http://127.0.0.1:9090\" alt=\"Result of stitching\"></p>\n"
+                "       <p><img style=\"width:85%\"id=\"center_img\" src=\"http://%s:9090\" alt=\"Result of stitching\"></p>\n"
                 "<br>"
-                "        Refresh the page for homography rebuilding!"
+                "        Tip: F5 pressing refer to homography rebuilding!"
                 "\n"
                 "<footer>\n"
                 "    <p><a href =\"http://sometea.me\">Panoramic</a> — 2016</p>\n"
@@ -60,7 +60,13 @@ static void remote_control_handler(struct mg_connection *conn, int ev, void *ev_
                     "Content-Type: text/html\r\n"
                     "Cache-Control: no-cache\r\n");
             pm->rebuildHomography();
-            mg_printf(conn, html_form);
+            for(int i = 0; i < 3; i++) {
+                for(int j = 0; j < 3; j++)
+                    cout << pm->getHomographyCoefficient(i, j) << " ";
+                cout << "\n";
+            }
+            char *ip = inet_ntoa(conn->sa.sin.sin_addr);
+            mg_printf(conn, html_form, ip);
             break;
     }
 }
@@ -113,7 +119,7 @@ int main(int argc, char* argv[]) {
         //Getting new frame
         warped = pm->getWarped();
         imencode(".jpg", warped, buf, param);
-        mg_mgr_poll(&mgr, 1000);
+        mg_mgr_poll(&mgr, 5);
     }
     mg_mgr_free(&mgr);
     cout << "Bye..." << endl;

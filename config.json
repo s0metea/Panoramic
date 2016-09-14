@@ -1,21 +1,22 @@
+
 //Main settings:
 {
 	"version" : "Panoramic v. 0.1",
 	"number_of_cameras" : 2,
 	"stream_port" : "9090",
-    "remote_control_port": "8080",
-    "stream_page" : "stream",
-    "remote_control_page": "control",
-    "w" : 600,
-    "h": 600,
+    	"remote_control_port": "8080",
+    	"stream_page" : "stream",
+    	"remote_control_page": "control",
+    	"w" : 800,
+    	"h": 600,
 //Cameras section
-   "cameras": [
-      {
-         "id" : 2
-      },
-      {
-         "id" : 1
-      }
+   	"cameras": [
+      	{
+        	"id" : 1
+      	},
+      	{
+         	"id" : 2
+      	}
 		
    ]
 

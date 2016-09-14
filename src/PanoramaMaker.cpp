@@ -112,3 +112,15 @@ void PanoramaMaker::initialize() {
     this->camInitialize();
     this->rebuildHomography();
 }
+
+int PanoramaMaker::getHomographyCoefficient(int x, int y) {
+    if(x > 2 || y > 2 || x < 0 || y < 0)
+        return -1;
+    return (int) homography.data()->data[x * 3 + y];
+}
+
+void PanoramaMaker::setHomographyCoefficient(int x, int y, int value) {
+    if(x > 2 || y > 2 || x < 0 || y < 0)
+        return;
+    homography.data()->data[x * 3 + y] = (unsigned char)value;
+}

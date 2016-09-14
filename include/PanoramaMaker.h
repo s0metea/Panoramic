@@ -21,6 +21,8 @@ public:
 	void displayCurrentFrames();
 	void rebuildHomography();
 
+    int getHomographyCoefficient(int x, int y);
+    void setHomographyCoefficient(int x, int y, int value);
 
     Mat getWarped();
 private:
@@ -28,6 +30,7 @@ private:
 
     vector<VideoCapture> cameras;
     vector<Mat> framesFromCameras;
+
     vector<Mat> homography;
     vector<int> camerasID;
 
